@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet Breakdown Calculator</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --accent-color: #ffeb3b; 
+            --text-color: #ffffff;
+            --text-secondary: #aaaaaa;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--accent-color);
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: #fff;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        #results {
+            margin-top: 25px;
+            display: none;
+        }
+
+        .result-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #333;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: var(--text-secondary);
+        }
+
+        .value {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Diet Breakdown</h2>
+    <div class="input-group">
+        <label for="weight">Enter Body Weight (kg):</label>
+        <input type="number" id="weight" placeholder="e.g. 105" oninput="calculate()">
+    </div>
+
+    <div id="results">
+        <div class="result-item">
+            <span class="label">1. Calories</span>
+            <span class="value" id="calories"></span>
+        </div>
+        <div class="result-item">
+            <span class="label">2. Protein</span>
+            <span class="value" id="protein"></span>
+        </div>
+        <div class="result-item">
+            <span class="label">3. Fats</span>
+            <span class="value" id="fats"></span>
+        </div>
+        <div class="result-item">
+            <span class="label">4. Fiber</span>
+            <span class="value" id="fiber"></span>
+        </div>
+        <div class="result-item">
+            <span class="label">5. Carbs</span>
+            <span class="value" id="carbs"></span>
+        </div>
+        <div class="result-item">
+            <span class="label">6. Water</span>
+            <span class="value" id="water"></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    function calculate() {
+        const weightInput = document.getElementById('weight').value;
+        const weight = parseFloat(weightInput);
+        const resultsDiv = document.getElementById('results');
+
+        if (isNaN(weight) || weight <= 0) {
+            resultsDiv.style.display = 'none';
+            return;
+        }
+
+        // Save weight to local storage
+        localStorage.setItem('userWeight', weightInput);
+
+        document.getElementById('calories').innerText = Math.round(weight * 26) + ' cal';
+        document.getElementById('protein').innerText = Math.round(weight * 2) + 'g';
+        document.getElementById('fats').innerText = Math.round(weight * 0.866) + 'g';
+        document.getElementById('fiber').innerText = '38g'; 
+        document.getElementById('carbs').innerText = '268g'; 
+        document.getElementById('water').innerText = '3.5L'; 
+
+        resultsDiv.style.display = 'block';
+    }
+
+    // Load saved weight on page load
+    window.onload = function() {
+        const savedWeight = localStorage.getItem('userWeight');
+        if (savedWeight) {
+            document.getElementById('weight').value = savedWeight;
+            calculate();
+        }
+    };
+</script>
+
+</body>
+</html>
